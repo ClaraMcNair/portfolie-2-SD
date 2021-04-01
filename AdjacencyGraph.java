@@ -1,3 +1,4 @@
+import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -20,22 +21,41 @@ public class AdjacencyGraph {
   public void MSTPrims(){
       int[] Distance =  new int[vertices.size()];
       int[] Predecessor = new int[vertices.size()];
+      boolean[] visited = new boolean[vertices.size()];
       MinHeap<Pair> Q = new MinHeap<>();
+
+      ArrayList<Pair> vertexPairs = new ArrayList<>();
       Arrays.fill(Distance, Integer.MAX_VALUE);
       Arrays.fill(Predecessor, -1);
+      Arrays.fill(visited, false);
       if (vertices.size()>0){
           Distance[0] = 0;
       }
       for (int i = 0; i<vertices.size(); i++){
-          Q.Insert(new Pair(Distance[i],i));
+          vertexPairs.add(new Pair(Distance[i],i));
+          Q.Insert(vertexPairs.get(i));
       }
+      int MST = 0;
       while (!Q.isEmpty()){
           Pair u = Q.extractMin();
           for (int v = 0; v<vertices.size(); v++){
-              if(vertices.get(u.index).get(v) < Distance[v]){
+              Vertex currentfrom = vertices.get(u.index);
+                  if (currentfrom.OutEdges.get(v).weight < Distance[v]){
 
-              }
+                      if (!visited[v]) {
+                          Distance[v] = currentfrom.OutEdges.get(v).weight;
+                          Predecessor[v] = u.index;
+                          int pos = Q.getPosition(vertexPairs.get(v));
+                          vertexPairs.get(v).distance = currentfrom.OutEdges.get(v).weight;
+                          Q.decreasekey(pos);
+                      }
+                  }
           }
+          MST+=Distance[u.index];
+      }
+      System.out.println("minimum spanning tree distance: " + MST);
+      for (int i = 0; i< vertices.size(); i++){
+          System.out.println("Parent " + Predecessor[i] + " to " + i + " EdgeWeight: " + Distance[i]);
       }
 
   }

@@ -1,8 +1,3 @@
-// hej
-// hej igen
-<<<<<<< HEAD
-// gecjhf
-=======
 
 public class Main {
 
@@ -89,7 +84,8 @@ public class Main {
 
 
 
-        MyGraph.PrintGraph();
+        //MyGraph.PrintGraph();
+        MyGraph.MSTPrims();
     }
 }
 
