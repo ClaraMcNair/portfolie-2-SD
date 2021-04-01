@@ -1,6 +1,9 @@
 // hej
 // hej igen
+<<<<<<< HEAD
 // gecjhf
+=======
+
 public class Main {
 
     public static void main(String[] args) {
