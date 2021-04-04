@@ -38,9 +38,10 @@ public class AdjacencyGraph {
       int MST = 0;
       while (!Q.isEmpty()){
           Pair u = Q.extractMin();
+          Vertex currentfrom = vertices.get(u.index);
           //for (int v = 0; v<vertices.size(); v++){
           for (int v = 0; v < currentfrom.OutEdges.size(); v++){
-              Vertex currentfrom = vertices.get(u.index);
+              //Vertex currentfrom = vertices.get(u.index);
                   if (currentfrom.OutEdges.get(v).weight < Distance[v]){
 
                       if (!visited[v]) {
