@@ -20,39 +20,26 @@ public class AdjacencyGraph {
   }
 
   public void MSTPrims(){
-      //int[] Distance =  new int[vertices.size()];
-      //int[] Predecessor = new int[vertices.size()];
-      //boolean[] visited = new boolean[vertices.size()];
       MinHeap<Vertex> Q = new MinHeap<>();
 
-      //ArrayList<Pair> vertexPairs = new ArrayList<>();
-      //Arrays.fill(Distance, Integer.MAX_VALUE);
-      //Arrays.fill(Predecessor, -1);
-      //Arrays.fill(visited, false);
       if (vertices.size()>0){
           vertices.get(0).dist = 0;
       }
       for (int i = 0; i<vertices.size(); i++){
-          //vertexPairs.add(new Pair(Distance[i],i));
           Q.Insert(vertices.get(i));
       }
       int MST = 0;
       while (!Q.isEmpty()){
           Vertex u = Q.extractMin();
           System.out.println(u.name);
-          //Vertex currentfrom = vertices.get(u.index);
-          //for (int v = 0; v<vertices.size(); v++){
+
           for (int v = 0; v < u.OutEdges.size(); v++){
-              //Vertex currentfrom = vertices.get(u.index);
                   if (u.OutEdges.get(v).weight < u.OutEdges.get(v).to.dist){
 
-                      //if (!visited[v]) {
                           u.OutEdges.get(v).to.dist = u.OutEdges.get(v).weight;
                           u.OutEdges.get(v).to.prev = u;
                           int pos = Q.getPosition(u.OutEdges.get(v).to);
-                          //vertexPairs.get(v).distance = currentfrom.OutEdges.get(v).weight;
                           Q.decreasekey(pos);
-                      //}
                   }
           }
           MST+= u.dist;
