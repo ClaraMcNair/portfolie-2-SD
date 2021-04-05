@@ -62,7 +62,7 @@ public class AdjacencyGraph {
           if (vertices.get(i).prev != null)
           System.out.println("Parent " + vertices.get(i).prev.name + " to " + vertices.get(i).name + " EdgeWeight: " + vertices.get(i).dist);
       }
-
+      System.out.println("Price of grid: " + MST*100000 + " DKK");
   }
 
   public  void PrintGraph(){
