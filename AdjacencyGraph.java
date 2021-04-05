@@ -16,48 +16,51 @@ public class AdjacencyGraph {
           return;
       }
       Edge e=new Edge(f, t,w);
+      Edge e2= new Edge(t,f,w);
   }
 
   public void MSTPrims(){
-      int[] Distance =  new int[vertices.size()];
-      int[] Predecessor = new int[vertices.size()];
-      boolean[] visited = new boolean[vertices.size()];
-      MinHeap<Pair> Q = new MinHeap<>();
+      //int[] Distance =  new int[vertices.size()];
+      //int[] Predecessor = new int[vertices.size()];
+      //boolean[] visited = new boolean[vertices.size()];
+      MinHeap<Vertex> Q = new MinHeap<>();
 
-      ArrayList<Pair> vertexPairs = new ArrayList<>();
-      Arrays.fill(Distance, Integer.MAX_VALUE);
-      Arrays.fill(Predecessor, -1);
-      Arrays.fill(visited, false);
+      //ArrayList<Pair> vertexPairs = new ArrayList<>();
+      //Arrays.fill(Distance, Integer.MAX_VALUE);
+      //Arrays.fill(Predecessor, -1);
+      //Arrays.fill(visited, false);
       if (vertices.size()>0){
-          Distance[0] = 0;
+          vertices.get(0).dist = 0;
       }
       for (int i = 0; i<vertices.size(); i++){
-          vertexPairs.add(new Pair(Distance[i],i));
-          Q.Insert(vertexPairs.get(i));
+          //vertexPairs.add(new Pair(Distance[i],i));
+          Q.Insert(vertices.get(i));
       }
       int MST = 0;
       while (!Q.isEmpty()){
-          Pair u = Q.extractMin();
-          Vertex currentfrom = vertices.get(u.index);
+          Vertex u = Q.extractMin();
+          System.out.println(u.name);
+          //Vertex currentfrom = vertices.get(u.index);
           //for (int v = 0; v<vertices.size(); v++){
-          for (int v = 0; v < currentfrom.OutEdges.size(); v++){
+          for (int v = 0; v < u.OutEdges.size(); v++){
               //Vertex currentfrom = vertices.get(u.index);
-                  if (currentfrom.OutEdges.get(v).weight < Distance[v]){
+                  if (u.OutEdges.get(v).weight < u.OutEdges.get(v).to.dist){
 
-                      if (!visited[v]) {
-                          Distance[v] = currentfrom.OutEdges.get(v).weight;
-                          Predecessor[v] = u.index;
-                          int pos = Q.getPosition(vertexPairs.get(v));
-                          vertexPairs.get(v).distance = currentfrom.OutEdges.get(v).weight;
+                      //if (!visited[v]) {
+                          u.OutEdges.get(v).to.dist = u.OutEdges.get(v).weight;
+                          u.OutEdges.get(v).to.prev = u;
+                          int pos = Q.getPosition(u.OutEdges.get(v).to);
+                          //vertexPairs.get(v).distance = currentfrom.OutEdges.get(v).weight;
                           Q.decreasekey(pos);
-                      }
+                      //}
                   }
           }
-          MST+=Distance[u.index];
+          MST+= u.dist;
       }
       System.out.println("minimum spanning tree distance: " + MST);
       for (int i = 0; i< vertices.size(); i++){
-          System.out.println("Parent " + Predecessor[i] + " to " + i + " EdgeWeight: " + Distance[i]);
+          if (vertices.get(i).prev != null)
+          System.out.println("Parent " + vertices.get(i).prev.name + " to " + vertices.get(i).name + " EdgeWeight: " + vertices.get(i).dist);
       }
 
   }
@@ -80,6 +83,9 @@ class Vertex implements Comparable<Vertex>{
     String name;
     ArrayList<Edge> OutEdges;
     Integer dist= Integer.MAX_VALUE;
+    Vertex prev = null;
+    boolean visited = false;
+
     public Vertex(String id){
         name=id;
         OutEdges=new ArrayList<Edge>();
@@ -88,7 +94,7 @@ class Vertex implements Comparable<Vertex>{
         OutEdges.add(e);
     }
 
-    @Override
+    @Override // det er den der sorterer minheap
     public int compareTo(Vertex o) {
         if (this.dist<o.dist)
             return -1;
@@ -109,7 +115,7 @@ class Edge{
         this.from.addOutEdge(this);
     }
 }
-
+//kan slettes helt
 class Pair implements Comparable<Pair>{
     Integer distance;
     Integer index;
