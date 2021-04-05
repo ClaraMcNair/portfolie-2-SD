@@ -31,11 +31,8 @@ public class AdjacencyGraph {
       int MST = 0;
       while (!Q.isEmpty()){
           Vertex u = Q.extractMin();
-          System.out.println(u.name);
-
           for (int v = 0; v < u.OutEdges.size(); v++){
                   if (u.OutEdges.get(v).weight < u.OutEdges.get(v).to.dist){
-
                           u.OutEdges.get(v).to.dist = u.OutEdges.get(v).weight;
                           u.OutEdges.get(v).to.prev = u;
                           int pos = Q.getPosition(u.OutEdges.get(v).to);
