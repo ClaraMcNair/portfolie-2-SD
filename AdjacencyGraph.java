@@ -71,7 +71,7 @@ class Vertex implements Comparable<Vertex>{ //vertex-objekt
     ArrayList<Edge> OutEdges;
     Integer dist= Integer.MAX_VALUE; //dist sættes som udgangspunkt til uendelig iflg. Prims
     Vertex prev = null; //forrige vertex sættes som udgangspunkt til null iflg. Prims
-    boolean visited = false; //kan slettes ikke?
+    
 
     public Vertex(String id){
         name=id;
@@ -102,19 +102,4 @@ class Edge{ //Edge-objekt, der består af to vertices og vægten mellem disse.
         this.from.addOutEdge(this);
     }
 }
-//kan slettes helt
-class Pair implements Comparable<Pair>{
-    Integer distance;
-    Integer index;
 
-    public Pair(Integer distance, Integer index){
-        this.distance = distance;
-        this.index = index;
-
-    }
-
-    @Override
-    public int compareTo(Pair p){
-        return this.distance.compareTo(p.distance);
-    }
-}
