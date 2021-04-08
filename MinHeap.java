@@ -11,25 +11,17 @@ public class MinHeap<T extends Comparable<T> >{
         this.minheap=new ArrayList<T>();
         this.size=0; 
     }
-    public int getPosition(T item){
-        return positionTable.get(item);
-    }
-    public boolean isEmpty(){
-        return size <= 0;
-    }
-    private int Parent(int pos){
-        return (pos-1)/2;//Fordi roden er på index 0, udregnes parent ved (index-1)/2
-    }
-    private int leftChild(int pos){
-        return pos*2 +1; // udregnes på denne måde fordi roden er på index 0
-    }
-    private int rightChild(int pos){
-        return pos*2 +2; // udregnes på denne måde fordi roden er på index 0
-    }
+    public int getPosition(T item){return positionTable.get(item);}
+    public boolean isEmpty(){return size <= 0;}
+    private int Parent(int pos){return (pos-1)/2;}//Fordi roden er på index 0, udregnes parent ved (index-1)/2
+
+    private int leftChild(int pos){return pos*2 +1;} // udregnes på denne måde fordi roden er på index 0
+
+    private int rightChild(int pos){return pos*2 +2;}// udregnes på denne måde fordi roden er på index 0
+
     private void swap(int pos1, int pos2){ //metode til at bytte elementer
         T dummy= minheap.get(pos1); //midlertidig liste, hvor elementet på pos1 opbevares
 
-  
         minheap.set(pos1, minheap.get(pos2)); //overwriter pos1 med element på pos2
         minheap.set(pos2,dummy); // overwriter pos2 med element i dummy/ forrige pos1
         positionTable.put(minheap.get(pos1),pos1); //opdaterer hashmap
