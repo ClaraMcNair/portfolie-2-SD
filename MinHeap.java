@@ -13,33 +13,45 @@ public class MinHeap<T extends Comparable<T> >{
     }
     public int getPosition(T item){return positionTable.get(item);}
     public boolean isEmpty(){return size <= 0;}
-    private int Parent(int pos){return (pos-1)/2;}//Fordi roden er på index 0, udregnes parent ved (index-1)/2
 
-    private int leftChild(int pos){return pos*2 +1;} // udregnes på denne måde fordi roden er på index 0
+    //Fordi roden er på index 0, udregnes parent ved (index-1)/2
+    private int Parent(int pos){return (pos-1)/2;}
 
-    private int rightChild(int pos){return pos*2 +2;}// udregnes på denne måde fordi roden er på index 0
+    // udregnes på denne måde fordi roden er på index 0
+    private int leftChild(int pos){return pos*2 +1;}
 
-    private void swap(int pos1, int pos2){ //metode til at bytte elementer
-        T dummy= minheap.get(pos1); //midlertidig liste, hvor elementet på pos1 opbevares
+    // udregnes på denne måde fordi roden er på index 0
+    private int rightChild(int pos){return pos*2 +2;}
 
-        minheap.set(pos1, minheap.get(pos2)); //overwriter pos1 med element på pos2
-        minheap.set(pos2,dummy); // overwriter pos2 med element i dummy/ forrige pos1
-        positionTable.put(minheap.get(pos1),pos1); //opdaterer hashmap
+    //metode til at bytte elementer
+    //elementet vi vil bytte, pos1, opbevares i en midlertidg liste
+    //vi overwriter element på pos1 med element på pos2, og overwriter pos2 med elementet i dummy.
+    private void swap(int pos1, int pos2){
+        T dummy= minheap.get(pos1);
+        minheap.set(pos1, minheap.get(pos2));
+        minheap.set(pos2,dummy);
+        positionTable.put(minheap.get(pos1),pos1);
         positionTable.put(minheap.get(pos2),pos2);
     }
     
     //metode til at insætte generic element T
+    //size øges når vi tilføjer et nyt element
+    //vi undersøger om nederste element i listen(det vi har tilføjet) skal rykkes op.
     public void Insert(T item){
         minheap.add(item);
         positionTable.put(item,size);
-        size++; //size øges når vi tilføjer et nyt element
-        decreasekey(size-1); // undersøg om nederste element i listen(det vi har tilføjet) skal rykkes op. 
+        size++;
+        decreasekey(size-1);
     }
-    public void decreasekey(int pos){ //metode til at rykke element op i heapen
+
+    //metode til at rykke element op i heapen
+    //elementerne skal byttes, hvis det element vi ser på mindre end dens parent
+    //parents position bliver den nye currentpos, så vi kan tjekke parent til parent
+    public void decreasekey(int pos){
         int currentpos=pos;
-        while (minheap.get(currentpos).compareTo(minheap.get(Parent(currentpos)))<0){ //er det element vi ser på mindre end dens parent?
-            swap(currentpos,Parent(currentpos)); //bytter dem
-            currentpos=Parent(currentpos); //parents position er den nye currentpos, så vi kan tjekke parent til parent
+        while (minheap.get(currentpos).compareTo(minheap.get(Parent(currentpos)))<0){
+            swap(currentpos,Parent(currentpos));
+            currentpos=Parent(currentpos);
         }
     }
 
@@ -69,11 +81,13 @@ public class MinHeap<T extends Comparable<T> >{
             }
         }
     }
-    public T extractMin(){ //metode til at fjerne det mindste element fra listen
-        T min = minheap.get(0); //træk element på index 0 ud.
-        minheap.set(0, minheap.get(size-1)); //sæt listens sidste element ind på index 0. 
-        positionTable.put(minheap.get(0),0); //opdater hashmap
-        size--; //listens størrelse skal mindskes
+    //metode til at fjerne det mindste element fra listen
+    //træk element på index 0 ud, og sæt listens sidste element ind på index 0.
+    public T extractMin(){
+        T min = minheap.get(0);
+        minheap.set(0, minheap.get(size-1));
+        positionTable.put(minheap.get(0),0);
+        size--;
         increasekey(0);
         return min;
     }

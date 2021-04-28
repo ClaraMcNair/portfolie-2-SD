@@ -21,38 +21,52 @@ public class AdjacencyGraph {
       Edge e2= new Edge(t,f,w);
   }
 
-  //Implementering af Prims
-  public void MSTPrims(){
-      MinHeap<Vertex> Q = new MinHeap<>(); //Opretter minheap til vertices
+  //Følgende kode er implementering af Prims
 
+  //Opretter minheap til vertices
+  public void MSTPrims(){
+      MinHeap<Vertex> Q = new MinHeap<>();
+
+      //Vores implementering af Prims tager udgangspunkt i vertex på index 0.
       if (vertices.size()>0){
-          vertices.get(0).dist = 0; //Vores implementering af Prims tager udgangspunkt i vertex på index 0.
+          vertices.get(0).dist = 0;
       }
-      for (int i = 0; i<vertices.size(); i++){ //Sætter alle vertices ind i minheap
+
+      //Sætter alle vertices ind i minheap
+      for (int i = 0; i<vertices.size(); i++){
           Q.Insert(vertices.get(i));
       }
+
+      //Følgende kode kører så længe der er vertices i vores minheap.
+      // Vi udtrækker øverste/mindste element i minheap, og løber alle vertices u og tilhørende outedges igennem.
+      //Hvis weight mellem u og v er mindre end dist mellem u og v,
+      // skal dist opdateres og v skal fjernes fra q.
       int MST = 0;
-      while (!Q.isEmpty()){ //Følgende kode kører så længe der er vertices i vores minheap.
-          Vertex u = Q.extractMin(); //udtræk øverste/mindste element i vores minheap
-          for (int v = 0; v < u.OutEdges.size(); v++){ //loop der løber alle vertices u og deres outedges igennem
-                  if (u.OutEdges.get(v).weight < u.OutEdges.get(v).to.dist){ //er weight mellem u og v mindre end dist mellem u og v?
-                          u.OutEdges.get(v).to.dist = u.OutEdges.get(v).weight; //dist mellem u og v sættes til weight mellem u og v 
-                          u.OutEdges.get(v).to.prev = u; //v's prev sættes til u
-                          int pos = Q.getPosition(u.OutEdges.get(v).to);  //v fjernes fra Q
+      while (!Q.isEmpty()){
+          Vertex u = Q.extractMin();
+          for (int v = 0; v < u.OutEdges.size(); v++){
+                  if (u.OutEdges.get(v).weight < u.OutEdges.get(v).to.dist){
+                          u.OutEdges.get(v).to.dist = u.OutEdges.get(v).weight;
+                          u.OutEdges.get(v).to.prev = u;
+                          int pos = Q.getPosition(u.OutEdges.get(v).to);
                           Q.decreasekey(pos);
                   }
           }
-          MST+= u.dist; //opdater størrelsen på MST ved løbende at tilføje dist mellem u.
+          //opdater størrelsen på MST ved løbende at tilføje dist mellem u.
+          MST+= u.dist;
       }
+
+      //print info for alle vertices der har en prev
       System.out.println("minimum spanning tree distance: " + MST);
-      for (int i = 0; i< vertices.size(); i++){ //løb alle vertices igennem.
-          if (vertices.get(i).prev != null) //print info for alle vertices der har en prev
+      for (int i = 0; i< vertices.size(); i++){
+          if (vertices.get(i).prev != null)
           System.out.println("Parent " + vertices.get(i).prev.name + " to " + vertices.get(i).name + " EdgeWeight: " + vertices.get(i).dist);
       }
       System.out.println("Price of grid: " + MST*100000 + " DKK");
   }
 
-  public  void PrintGraph(){ //metode til print af alle edges i grafen
+    //metode til print af alle edges i grafen
+  public  void PrintGraph(){
       for (int i=0;i<vertices.size();i++)
       {
           System.out.println(" From Vertex: "+ vertices.get(i).name);
@@ -66,11 +80,14 @@ public class AdjacencyGraph {
   }
 }
 
-class Vertex implements Comparable<Vertex>{ //vertex-objekt
+//Vores vertex-objekt
+//dist sættes som udgangspunkt til uendelig iflg. Prims
+//forrige vertex sættes som udgangspunkt til null iflg. Prims
+class Vertex implements Comparable<Vertex>{
     String name;
     ArrayList<Edge> OutEdges;
-    Integer dist= Integer.MAX_VALUE; //dist sættes som udgangspunkt til uendelig iflg. Prims
-    Vertex prev = null; //forrige vertex sættes som udgangspunkt til null iflg. Prims
+    Integer dist= Integer.MAX_VALUE;
+    Vertex prev = null;
     
 
     public Vertex(String id){
@@ -81,7 +98,8 @@ class Vertex implements Comparable<Vertex>{ //vertex-objekt
         OutEdges.add(e);
     }
 
-    @Override // Sorterer minheap på baggrund af distancen.
+    // Sorterer minheap på baggrund af distancen.
+    @Override
     public int compareTo(Vertex o) {
         if (this.dist<o.dist)
             return -1;
@@ -91,7 +109,8 @@ class Vertex implements Comparable<Vertex>{ //vertex-objekt
     }
 }
 
-class Edge{ //Edge-objekt, der består af to vertices og vægten mellem disse.
+//Edge-objekt, der består af to vertices og vægten mellem disse.
+class Edge{
     Integer weight;
     Vertex from;
     Vertex to;
